@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="db_InstructorsModelStoreContainer" CdmEntityContainer="db_InstructorsEntities">
+    <EntitySetMapping Name="instructorsTables">
+      <EntityTypeMapping TypeName="db_InstructorsModel.instructorsTable">
+        <MappingFragment StoreEntitySet="instructorsTable">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="InstructorName" ColumnName="InstructorName" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="PhoneNum" ColumnName="PhoneNum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

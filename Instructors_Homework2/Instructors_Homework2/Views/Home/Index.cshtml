@@ -1,0 +1,161 @@
+﻿@using PagedList;
+
+@model IPagedList<Instructors_Homework2.Models.instructorsTable>
+
+@using PagedList.Mvc;
+
+
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<head>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+
+<h2>Index</h2>
+
+<p>
+    <button class="btn btn-primary" id="create_btn" onclick="create()">Create New Entry</button>
+</p>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    <b> Search Option: </b>
+
+    @Html.RadioButton("option", "InstructorName") <text>Instructor Name</text>
+    @Html.RadioButton("option", "Gender") <text>Gender</text>
+    @Html.RadioButton("option", "Subject") <text>Subject</text>
+    @Html.RadioButton("option", "Email") <text>Email</text>
+    @Html.RadioButton("option", "PhoneNum") <text>Phone Number</text>
+
+    @Html.TextBox("search")
+    <input type="submit" name="submit" value="Search" />
+}
+
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().InstructorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Subject)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().PhoneNum)
+        </th>
+        <th></th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.InstructorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subject)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNum)
+            </td>
+            <td>
+                <button class="btn btn-primary" id="create_btn" onclick="edit(@item.Id)">Edit</button>
+                <button class="btn btn-info" id="create_btn" onclick="read(@item.Id)">Details</button>
+                <button class="btn btn-danger" id="create_btn" onclick="del(@item.Id)">Delete</button>
+            </td>
+        </tr>
+    }
+
+    @Html.PagedListPager(Model, pageNumber =>
+                         Url.Action("Index", new { pageNumber }))
+
+</table>
+
+<div class="modal fade" id="ActionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h4 class="modal-title" id="modalTitle"></h4>
+            </div>
+            <div class="modal-body" id="modalbody"></div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="DeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Data</h4>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body"> Are you sure you want to delete this product?</div>
+            <div class="modal-footer">
+                <input type='button' class='btn btn-danger' id='delYes' value='Delete' />
+                <input type="button" value="Cancel" data-dismiss="modal" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var edit = function (id) {
+        var editURL = "/Home/EditUpdate?id=" + id;
+        $("#modalTitle").html("Edit/Update Info");
+        $("#modalbody").load(editURL, function () {
+            $("#ActionModal").modal("show");
+        });
+    }
+
+    var del = function (id) {
+        $("#DeleteModal").modal("show");
+        $("#delYes").on("click", function () {
+            var deleteURL = "/Home/delete?id=" + id;
+            $.ajax
+                ({
+                    type: "post",
+                    url: deleteURL,
+                    success: function () {
+                        $("#DeleteModal").modal("hide");
+                        window.location.reload();
+                    }
+                });
+        });
+    }
+
+    var read = function (id) {
+        var readURL = "/Home/Read?id=" + id;
+        $("#modalTitle").html("Read Product");
+        $("#modalbody").load(readURL, function () {
+            $("#ActionModal").modal("show");
+        });
+    }
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+}
